@@ -1,0 +1,22 @@
+# 配置数据库的连接字符串
+spring:
+  datasource:
+    #    协议://ip:端口/具体的一个数据库?query string
+    url: jdbc:mysql://127.0.0.1:3306/mycnblog?characterEncoding=utf8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: "back7671773"
+    #    驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+# 设置 Mybatis 的 xml 保存路径
+mybatis:
+  mapper-locations: classpath:Mapper/*Mapper.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 配置打印 MyBatis 执行的 SQL
+logging:
+  level:
+    com:
+      example:
+        spring_transaction: debug

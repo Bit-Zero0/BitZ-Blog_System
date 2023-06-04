@@ -25,4 +25,8 @@ public class ArticleServie {
     public int delArt(Integer id, Integer uid){
         return articleMapper.delArt(id, uid);
     }
+
+    public ArticleInfo getArtDetail(Integer id){
+        return articleMapper.getArtDetail(id);
+    }
 }

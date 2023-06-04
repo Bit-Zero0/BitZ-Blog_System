@@ -17,6 +17,8 @@ public class AppConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/blog_list.html")
                 .excludePathPatterns("/blog_content.html")
                 .excludePathPatterns("/user/login")
-                .excludePathPatterns("/user/reg");
+                .excludePathPatterns("/user/reg")
+                .excludePathPatterns("/art/detail")
+                .excludePathPatterns("user/getuserbyid");
     }
 }

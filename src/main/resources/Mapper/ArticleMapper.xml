@@ -13,4 +13,8 @@
     <delete id="delArt">
         delete from articleinfo where id=#{id} and uid=#{uid}
     </delete>
+
+    <select id="getArtDetail" resultType="com.example.bitzblogsystem.Entity.ArticleInfo">
+        select * from articleinfo where id=#{id}
+    </select>
 </mapper>

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class ArticleInfo {
     private Integer id;
     private String title;
-    private String cotent;
+    private String content;
 
     @JsonFormat(pattern = "yyyy-MM-dd" , timezone = "GMT+8")
     private LocalDateTime createtime;

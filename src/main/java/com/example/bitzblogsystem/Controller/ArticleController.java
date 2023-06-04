@@ -41,4 +41,13 @@ public class ArticleController {
 
         return AjaxResult.success(articleServie.delArt(id , userInfo.getId()));
     }
+
+    @RequestMapping("/detail")
+    public AjaxResult getArtDetail(Integer id){
+        if(id == null && id <= 0){
+            AjaxResult.fail(-1 , "非法参数");
+        }
+        return AjaxResult.success(articleServie.getArtDetail(id));
+    }
+
 }

@@ -17,4 +17,17 @@
     <select id="getArtDetail" resultType="com.example.bitzblogsystem.Entity.ArticleInfo">
         select * from articleinfo where id=#{id}
     </select>
+
+    <update id="incrRCount">
+        update articleinfo set rcount=rcount+1 where id=#{id}
+    </update>
+
+    <update id="update">
+        update articleinfo set title=#{title} , content=#{content} , updatetime=#{updatetime}
+        where id=#{id} and uid=#{uid}
+    </update>
+
+    <insert id="add">
+        insert into articleinfo(title , content , uid) values(#{title} , #{content}, #{uid})
+    </insert>
 </mapper>

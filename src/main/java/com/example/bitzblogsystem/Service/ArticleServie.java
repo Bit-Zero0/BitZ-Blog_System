@@ -29,4 +29,16 @@ public class ArticleServie {
     public ArticleInfo getArtDetail(Integer id){
         return articleMapper.getArtDetail(id);
     }
+
+    public int incrRCount(Integer id){
+        return articleMapper.incrRCount(id);
+    }
+
+    public int update(ArticleInfo articleInfo){
+        return articleMapper.update(articleInfo);
+    }
+
+    public int add(ArticleInfo articleInfo){
+        return articleMapper.add(articleInfo);
+    }
 }

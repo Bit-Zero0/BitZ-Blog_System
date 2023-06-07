@@ -4,7 +4,7 @@ import com.example.bitzblogsystem.Common.AjaxResult;
 import com.example.bitzblogsystem.Common.UserSessionUtils;
 import com.example.bitzblogsystem.Entity.ArticleInfo;
 import com.example.bitzblogsystem.Entity.UserInfo;
-import com.example.bitzblogsystem.Service.ArticleServie;
+import com.example.bitzblogsystem.Service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
 @RequestMapping("/art")
 public class ArticleController {
     @Autowired
-    private ArticleServie articleServie;
+    private ArticleService articleService;
 
     @RequestMapping("/list")
     public AjaxResult getList(HttpServletRequest req){
@@ -26,7 +27,7 @@ public class ArticleController {
         if(userInfo == null){
             return AjaxResult.fail(-1 ,"非法请求");
         }
-        List<ArticleInfo> list = articleServie.getList(userInfo.getId());
+        List<ArticleInfo> list = articleService.getList(userInfo.getId());
         return AjaxResult.success(list);
     }
 
@@ -41,7 +42,7 @@ public class ArticleController {
             return AjaxResult.fail(-2 , "用户未登录");
         }
 
-        return AjaxResult.success(articleServie.delArt(id , userInfo.getId()));
+        return AjaxResult.success(articleService.delArt(id , userInfo.getId()));
     }
 
     @RequestMapping("/detail")
@@ -49,7 +50,7 @@ public class ArticleController {
         if(id == null && id <= 0){
             AjaxResult.fail(-1 , "非法参数");
         }
-        return AjaxResult.success(articleServie.getArtDetail(id));
+        return AjaxResult.success(articleService.getArtDetail(id));
     }
 
     @RequestMapping("/incr-rcount")
@@ -57,7 +58,7 @@ public class ArticleController {
         if(id == null || id <= 0){
             AjaxResult.fail(-1 , "非法参数");
         }
-        return AjaxResult.success(articleServie.incrRCount(id));
+        return AjaxResult.success(articleService.incrRCount(id));
     }
 
     @RequestMapping("/update")
@@ -76,7 +77,7 @@ public class ArticleController {
         articleInfo.setUid(userInfo.getId());
         articleInfo.setUpdatetime(LocalDateTime.now());
 
-        return AjaxResult.success(articleServie.update(articleInfo));
+        return AjaxResult.success(articleService.update(articleInfo));
     }
 
     @RequestMapping("/add")
@@ -94,7 +95,39 @@ public class ArticleController {
         articleInfo.setCreatetime(LocalDateTime.now());
         articleInfo.setUid(userInfo.getId());
 
-        return AjaxResult.success(articleServie.add(articleInfo));
+        return AjaxResult.success(articleService.add(articleInfo));
+    }
+
+    @RequestMapping("/listbypage")
+    public AjaxResult getListByPage(Integer pindex , Integer psize){
+        //参数校正
+        if(pindex == null || pindex <=  1){
+            pindex = 1;
+        }
+        if(psize == null || psize <= 1){
+            psize = 2;
+        }
+
+        // 分页公式的值 = (当前页码-1)*每页显示条
+        int offset = (pindex - 1) * psize;
+
+        // 文章列表数据
+        List<ArticleInfo> list = articleService.getListByPage(psize , offset);
+
+        // 总共有多少条数据
+        int totalCount = articleService.getCount();
+
+        // 总条数/psize（每页显示条数）
+        double pcountdb = totalCount / ((double)psize);
+
+        // 使用进一法得到总页数
+        int pcount = (int) Math.ceil(pcountdb);
+
+        HashMap<String ,Object> result = new HashMap<>();
+        result.put("list" , list);
+        result.put("pcount" , pcount);
+        return AjaxResult.success(result);
+
     }
 
 }

@@ -2,15 +2,15 @@ package com.example.bitzblogsystem.Controller;
 
 import com.example.bitzblogsystem.Common.AjaxResult;
 import com.example.bitzblogsystem.Common.AppVariable;
+import com.example.bitzblogsystem.Common.PasswordUtils;
 import com.example.bitzblogsystem.Common.UserSessionUtils;
 import com.example.bitzblogsystem.Entity.UserInfo;
 import com.example.bitzblogsystem.Entity.VO.UserInfoVO;
-import com.example.bitzblogsystem.Service.ArticleServie;
+import com.example.bitzblogsystem.Service.ArticleService;
 import com.example.bitzblogsystem.Service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,15 +24,17 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private ArticleServie articleServie;
+    private ArticleService articleService;
 
     @RequestMapping("/reg")
     public AjaxResult reg(UserInfo userInfo) {
+        // 非空效验和参数有效性效验
         if(userInfo == null || !StringUtils.hasLength(userInfo.getUsername())
-            || !StringUtils.hasLength(userInfo.getPassword())) {
+                || !StringUtils.hasLength(userInfo.getPassword())) {
             return AjaxResult.fail(-1 , "非法参数");
         }
-
+        // 密码加盐处理
+        userInfo.setPassword(PasswordUtils.encrypt(userInfo.getPassword()));
         return AjaxResult.success(userService.reg(userInfo));
     }
 
@@ -46,7 +48,7 @@ public class UserController {
         UserInfo userInfo = userService.getUserByName(username);
         if(userInfo != null && userInfo.getId() > 0){
             //判断密码是否相同
-            if(password.equals(userInfo.getPassword()) ){
+            if(PasswordUtils.check(password , userInfo.getPassword())){
                 // 登录成功
                 // 将用户存储到 session
                 HttpSession session = req.getSession();
@@ -70,7 +72,7 @@ public class UserController {
         // Spring 提供的深克隆方法
         BeanUtils.copyProperties(userInfo , userInfoVO);
         // 得到用户发表文章的总数
-        userInfoVO.setArtCount(articleServie.getArtCountById(userInfo.getId()));
+        userInfoVO.setArtCount(articleService.getArtCountById(userInfo.getId()));
         return AjaxResult.success(userInfoVO);
     }
 
@@ -88,7 +90,7 @@ public class UserController {
         UserInfoVO userInfoVO = new UserInfoVO();
         BeanUtils.copyProperties(userInfo ,userInfoVO);
 
-        userInfoVO.setArtCount(articleServie.getArtCountById(id));
+        userInfoVO.setArtCount(articleService.getArtCountById(id));
         return AjaxResult.success(userInfoVO);
     }
 
@@ -97,5 +99,7 @@ public class UserController {
         session.removeAttribute(AppVariable.USER_SESSION_KEY);
         return AjaxResult.success(1);
     }
+
+
 
 }

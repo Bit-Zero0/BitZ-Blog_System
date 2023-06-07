@@ -30,4 +30,13 @@
     <insert id="add">
         insert into articleinfo(title , content , uid) values(#{title} , #{content}, #{uid})
     </insert>
+
+    <select id="getListByPage" resultType="com.example.bitzblogsystem.Entity.ArticleInfo">
+        select * from articleinfo limit #{psize} offset #{offsize}
+    </select>
+
+    <select id="getCount" resultType="Integer">
+        select count(*) from articleinfo
+    </select>
+
 </mapper>

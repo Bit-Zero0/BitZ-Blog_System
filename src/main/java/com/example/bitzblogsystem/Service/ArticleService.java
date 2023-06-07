@@ -2,14 +2,13 @@ package com.example.bitzblogsystem.Service;
 
 import com.example.bitzblogsystem.Entity.ArticleInfo;
 import com.example.bitzblogsystem.Mapper.ArticleMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ArticleServie {
+public class ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
@@ -40,5 +39,13 @@ public class ArticleServie {
 
     public int add(ArticleInfo articleInfo){
         return articleMapper.add(articleInfo);
+    }
+
+    public List<ArticleInfo> getListByPage(Integer psize , Integer offsize){
+        return articleMapper.getListByPage(psize , offsize);
+    };
+
+    public int getCount(){
+        return articleMapper.getCount();
     }
 }

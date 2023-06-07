@@ -13,7 +13,7 @@ public interface ArticleMapper {
 
     List<ArticleInfo> getList(@Param("uid") Integer uid);
 
-    int delArt(@Param("id")Integer id, @Param("uid")Integer uid);
+    int delArt(@Param("id") Integer id, @Param("uid") Integer uid);
 
     ArticleInfo getArtDetail(@Param("id") Integer id);
 
@@ -22,4 +22,9 @@ public interface ArticleMapper {
     int update(ArticleInfo articleInfo);
 
     int add(ArticleInfo articleInfo);
+
+    List<ArticleInfo> getListByPage(@Param("psize") Integer psize, @Param("offsize") Integer offsize);
+
+    int getCount();
+
 }

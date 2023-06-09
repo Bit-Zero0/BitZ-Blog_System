@@ -10,6 +10,7 @@ public class AppConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/css/**")
+                .excludePathPatterns("/js/**")
                 .excludePathPatterns("/editor.md/**")
                 .excludePathPatterns("/img/**")
                 .excludePathPatterns("/login.html")
@@ -19,7 +20,6 @@ public class AppConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/reg")
                 .excludePathPatterns("/art/detail")
-                .excludePathPatterns("/user/getuserbyid")
-                .excludePathPatterns("/blog_modify.html");
+                .excludePathPatterns("/user/getuserbyid");
     }
 }

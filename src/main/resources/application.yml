@@ -1,3 +1,4 @@
+
 # 配置数据库的连接字符串
 spring:
   datasource:
@@ -7,8 +8,19 @@ spring:
     password: "back7671773"
     #    驱动
     driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: Please enter your ip
+    port: 6379
+    password: ""
+    database: 0
+  session:
+    store-type: redis
+    redis:
+      flush-mode: on_save
+      namespace: spring:session
 
-# 设置 Mybatis 的 xml 保存路径
+
+  # 设置 Mybatis 的 xml 保存路径
 mybatis:
   mapper-locations: classpath:Mapper/*Mapper.xml
   configuration:
@@ -20,3 +32,8 @@ logging:
     com:
       example:
         spring_transaction: debug
+server:
+  servlet:
+    session:
+      timeout: 1800
+
